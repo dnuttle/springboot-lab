@@ -53,11 +53,50 @@ public class HelloController {
   @RequestMapping(value="/template", method=RequestMethod.GET)
   @ResponseBody
   public ModelAndView template() {
-    ModelAndView mv = new ModelAndView();
-    //Template name defaults to the mapping, but can be changed
-    mv.setViewName("login");
-    mv.addObject("name", "A name value");
-    mv.addObject("login", "A login name");
+    ModelAndView mv = new ModelAndView("template");
+    //If zero-arg ctor used, view name defaults to mapping name but can be overridden
+    //mv.setViewName("login");
+    //If model has only one element, its name and value can be passed as args 2 and 3
+    //mv = new ModelAndView("login", "login", "A login name");
     return mv;
   }
+  
+  @RequestMapping(value="/login", method=RequestMethod.GET)
+  @ResponseBody
+  public ModelAndView login() {
+    ModelAndView mv = new ModelAndView("login", "login", "A login name");
+    LOG.info("login() method called");
+    return mv;
+  }
+  
+  /**
+   * Demonstration of forwarding using ModelAndView.
+   * The ModelAndView returned depends on a condition, in this case
+   * whether or not a "forward" parameter is sent.
+   * @param allReqParams
+   * @return
+   */
+  @RequestMapping(value="/condition", method=RequestMethod.GET)
+  public ModelAndView condition(@RequestParam Map<String, String> allReqParams) {
+    ModelAndView mv;
+    /*
+     * Note that when forwarding is used, the other mapping is not triggered.
+     * E.g., if the "login" ModelAndView is returned, that's it; the model and view
+     * contained in that instance is paired with the actual view (the template).
+     * There is no called to the login() method above.
+     * But as per example below, this logic can <em>call</em> that method
+     * instead of returning a ModelAndView.
+     */
+    LOG.info("condition() method  called");
+    if (allReqParams.containsKey("forward")) {
+      mv = new ModelAndView("template");
+    } else {
+      //mv = new ModelAndView("login", "login", "Forwarded here");
+      //In this case, we don't create the ModelAndView directly, but delegate
+      //to another method/mapping.
+      return login();
+    }
+    return mv;
+  }
+  
 }
