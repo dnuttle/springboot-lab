@@ -24,6 +24,7 @@ repositories {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+ext.buildDemo = project.hasProperty('buildDemo') ? project.getProperty('buildDemo') : false
 
 dependencies {
     // tag::jetty[]
@@ -39,3 +40,31 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-logging")
     testCompile("junit:junit")
 }
+
+sourceSets {
+  demo {
+    java {
+      srcDir 'src/demo/java'
+      /*
+      if(buildDemo) {
+        compileClasspath += main.output
+        runtimeClasspath += main.output
+      }
+      */
+    }
+    /*
+    if (buildDemo) {
+      compileClasspath += sourceSets.main.runtimeClasspath
+    }
+    */
+  }
+  main {
+    if (buildDemo) {
+      compileClasspath += sourceSets.demo.output
+      runtimeClasspath += sourceSets.demo.output
+    }
+  }
+}
+
+
+println "Build demo: $buildDemo"

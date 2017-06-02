@@ -10,6 +10,8 @@ import net.nuttle.service.TimeService;
 @Component
 public class HealthCheck implements HealthIndicator {
 
+  private long slow = 30000;
+  
   @Autowired
   TimeService timeService;
   
@@ -23,6 +25,10 @@ public class HealthCheck implements HealthIndicator {
   }
   
   private int check() {
+    //Customize later; want to show a status of SLOW rather than DOWN.
+    if (timeService.getLastChecked() < System.currentTimeMillis() - slow) {
+      return 1;
+    }
     return 0;
   }
 }
