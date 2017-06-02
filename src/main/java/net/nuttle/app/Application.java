@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 )
 //This says to ignore all of the default filters, but @Controller and @Component are still scanned;
 //apparently if there are multiple ComponentScan tags, the result is an OR of all of them, not an AND.
-@ComponentScan(basePackages={"net.nuttle.servlet", "net.nuttle.bean"}, useDefaultFilters=false)
+//@ComponentScan(basePackages={"net.nuttle.servlet", "net.nuttle.bean"}, useDefaultFilters=false)
 
 /* Notes on ComponentScan filtering
  * 
