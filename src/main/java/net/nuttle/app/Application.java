@@ -10,6 +10,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 
 //SpringBootApplication annotation is an umbrella that includes:
 //Configuration
@@ -18,11 +19,12 @@ import org.springframework.stereotype.Controller;
 @SpringBootApplication
 
 //ComponentScan is a meta-annotation for SpringBootApplication,
-//but I want to override.  In this example, only Controllers and Components
-//will be scanned in the specified packages.  @Repository and @Service would be ignored.
-@ComponentScan(basePackages={"net.nuttle.servlet", "net.nuttle.bean"}, 
+//but I want to override.  In this example, only Controllers, Components and Services
+//will be scanned in the specified packages.  @Repository would be ignored.
+@ComponentScan(basePackages={"net.nuttle"}, 
   useDefaultFilters=false,
-  includeFilters={@ComponentScan.Filter(type=FilterType.ANNOTATION, value={Controller.class, Component.class})}
+  includeFilters={@ComponentScan.Filter(type=FilterType.ANNOTATION, 
+    value={Component.class, Controller.class, Service.class})}
 )
 //This says to ignore all of the default filters, but @Controller and @Component are still scanned;
 //apparently if there are multiple ComponentScan tags, the result is an OR of all of them, not an AND.
