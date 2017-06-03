@@ -29,7 +29,7 @@ public class TimeService implements ApplicationRunner {
       try {
         lastChecked = System.currentTimeMillis();
         LOG.info("Service is awake");
-        Thread.sleep(5000);
+        Thread.sleep(60000);
       } catch (InterruptedException e) {
         LOG.info("Thread interrupted");
         return;

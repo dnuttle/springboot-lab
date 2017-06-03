@@ -2,9 +2,48 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<title>Login Template</title>
+	<link type="text/css" href="/css/darkly.bootstrap.min.css" rel="stylesheet" />
+	<style>
+		@media screen and (max-width: 767px) {
+		    body {
+		        font-size: 2.6em;
+		    }
+		}
+		
+		@media screen and (min-width: 768px) {
+		    body {
+		        font-size: 2.6em;
+		    }
+		}
+		
+		@media screen and (min-width: 992px) {
+		    body {
+		        font-size: 2em;
+		    }
+		}
+		
+		@media screen and (min-width: 1200px) {
+		    body {
+		        font-size: 1.8em;
+		    }
+		}
+	</style>
 </head>
 <body>
-<h2>Login template</h2>
-<p th:text="${login}"/>
+	<div class="container">
+		<h2>Login template</h2>
+		<p th:text="${login}"/>
+		<form class="form-horizontal">
+			<div class="form-group">
+				<label class="col-xs-3 control-label" for="divesite">Dive site:</label>
+				<div class="col-xs-5">
+					<input class="form-control" type="text" id="divesite" value="" placeholder="(example)"/>
+				</div>
+				<div class="col-xs-2">
+					<input class="btn btn-success" type="submit" value="Submit"/>
+				</div>
+			</div>
+		</form>
+	</div>
 </body>
 </html>

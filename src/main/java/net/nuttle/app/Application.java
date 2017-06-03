@@ -11,6 +11,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ViewResolver;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 //SpringBootApplication annotation is an umbrella that includes:
 //Configuration
@@ -95,4 +99,21 @@ public class Application {
     return new TestBean();
   }
   */
+  
+  
+  @Bean
+  public ViewResolver viewResolver() {
+    ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+    templateResolver.setTemplateMode("XHTML");
+    templateResolver.setPrefix("templates/");
+    templateResolver.setSuffix(".html");
+
+    SpringTemplateEngine engine = new SpringTemplateEngine();
+    engine.setTemplateResolver(templateResolver);
+
+    ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+    viewResolver.setTemplateEngine(engine);
+    return viewResolver;
+  }
+
 }
