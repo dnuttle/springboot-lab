@@ -130,4 +130,10 @@ public class MainController {
     return map;
   }
   
+  @RequestMapping(value="/generatemessage", method=RequestMethod.GET)
+  @ResponseBody
+  public String generate() {
+    messageService.generateMessage();
+    return "generated";
+  }
 }

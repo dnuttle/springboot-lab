@@ -18,5 +18,13 @@ public class FeedMessage extends Message {
   public String getFeedPath() {
     return feedPath;
   }
+  
+  public String getProp1() {
+    return "property 1 value";
+  }
+  
+  public String getProp2() {
+    return "property 2 value";
+  }
 
 }
