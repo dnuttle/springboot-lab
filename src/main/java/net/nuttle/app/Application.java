@@ -1,5 +1,8 @@
 package net.nuttle.app;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,6 +19,8 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
+import net.nuttle.service.MessageService;
+
 //SpringBootApplication annotation is an umbrella that includes:
 //Configuration
 //AutoConfigurationEnabled
@@ -28,7 +33,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 @ComponentScan(basePackages={"net.nuttle"}, 
   useDefaultFilters=false,
   includeFilters={@ComponentScan.Filter(type=FilterType.ANNOTATION, 
-    value={Component.class, Controller.class, Service.class})}
+    value={Component.class, Controller.class, Service.class, SpringBootApplication.class})}
 )
 //This says to ignore all of the default filters, but @Controller and @Component are still scanned;
 //apparently if there are multiple ComponentScan tags, the result is an OR of all of them, not an AND.
@@ -72,6 +77,8 @@ The following excludes any class annotated as @Service in the scan of the specif
 */
 public class Application {
 
+  private static final Logger LOG = LoggerFactory.getLogger(Application.class);
+  
   public static void main(String[] args) {
     SpringApplication.run(Application.class, args);
   }
@@ -99,6 +106,14 @@ public class Application {
     return new TestBean();
   }
   */
+  
+  @Bean
+  @Order(2)
+  public CommandLineRunner commandLinerRunner(ApplicationContext ctx) {
+    return args -> {
+      LOG.debug("Starting CommandLineRunner *************************************");
+    };
+  }
   
   
   @Bean

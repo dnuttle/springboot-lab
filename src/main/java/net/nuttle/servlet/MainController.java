@@ -1,10 +1,12 @@
 package net.nuttle.servlet;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,15 +16,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import net.nuttle.bean.TestBean;
+import net.nuttle.model.Message;
+import net.nuttle.service.MessageService;
 
 //RestController is annotated with both Controller and ResponseBody
 @Controller
-public class HelloController {
+public class MainController {
 
-  private static final Logger LOG = LoggerFactory.getLogger(HelloController.class);
+  private static final Logger LOG = LoggerFactory.getLogger(MainController.class);
   
   @Autowired
   TestBean bean;
+  
+  @Autowired
+  MessageService messageService;
+  
+  @Autowired
+  ApplicationContext appContext;
   
   @RequestMapping(value="/hello", method=RequestMethod.GET)
   @ResponseBody
@@ -97,6 +107,27 @@ public class HelloController {
       return login();
     }
     return mv;
+  }
+  
+  @RequestMapping(value="/monitor", method=RequestMethod.GET)
+  public ModelAndView monitor() {
+    ModelAndView mv = new ModelAndView("servicelog");
+    return mv;
+  }
+  
+  @RequestMapping(value="/messages", method=RequestMethod.GET, produces="application/json")
+  @ResponseBody
+  //A @RequestParam can specify a name and a default value; note that "name" and "value" are aliases for parameter name!
+  public ModelMap messages(@RequestParam(name="maxMessages", defaultValue="20") int maxMessages) {
+    ModelMap map = new ModelMap();
+    map.addAttribute("type", "FEED");
+    List<Message> messages = messageService.getMessages();
+    int start = messages.size() - maxMessages;
+    if (start < 0) start = 0;
+    int end = start + maxMessages;
+    if (messages.size() < end) end = messages.size();
+    map.addAttribute("data", messages.subList(start, end));
+    return map;
   }
   
 }
