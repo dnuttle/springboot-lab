@@ -15,16 +15,25 @@ body {
 	margin-bottom:10px;
 	padding:2px 2px 2px 4px;
 }
+.box {
+	height: 400px;
+}
 .auto-scroll {
 	overflow-y: auto;
 	overflow-x: hidden;
-	height: 400px;
+	padding-right: 4px;
 }
 #status > h4 {
 	display: none;
 }
 #messages tr {
 	border-bottom: 2px solid #303030;
+}
+table {
+	table-layout: fixed;
+}
+.col1 {
+	width: 120px;
 }
 </style>
 <script src="/js/jquery-3.2.1.min.js"></script>
@@ -39,10 +48,12 @@ $(document).ready(function() {
 		paused = true;
 		waitperiod = 5000;
 		setStatus("paused")
+		this.blur();
 	})
 	$("#btn-resume").click(function() {
 		paused = false;
 		setStatus("pending")
+		this.blur();
 	})
 	$("#btn-generate").click(function() {
 		$.ajax("/generatemessage", {
@@ -52,6 +63,7 @@ $(document).ready(function() {
 				console.log(data);
 			}
 		});
+		this.blur();
 	})
 	function checkMessages() {
 		if (paused) {
@@ -82,7 +94,7 @@ $(document).ready(function() {
 					if (el < maxMessages) {
 						count++;
 						//console.log(JSON.stringify(messages[el]));
-						$('<tr class="info"><td>' + msgType + '</td><td>' + JSON.stringify(messages[el]) + '</td></tr>').prependTo("#messages");
+						$('<tr class="info"><td class="col1">' + msgType + '</td><td>' + JSON.stringify(messages[el]) + '</td></tr>').prependTo("#messages");
 					}
 				}
 				//console.log("Added " + count + " messages");
@@ -96,8 +108,8 @@ $(document).ready(function() {
 				console.log(req.getAllResponseHeaders());
 				console.log("Check for messages failed, increasing wait to " + waitperiod)
 				console.log("Err: " + textStatus + ": " + errorThrown);
-				$("#status-text").text(textStatus + " (" + req.status + "): " + errorThrown);
 				setStatus("down")
+				$("#status-text").text(textStatus + " (" + req.status + "): " + errorThrown);
 			},
 			complete: function() {
 				setTimeout(checkMessages, waitperiod)
@@ -110,6 +122,7 @@ $(document).ready(function() {
 	}, waitperiod)
 })
 function setStatus(status) {
+	$("#status-text").text("");
 	$("#status > h4").hide();
 	$("#status > ." + status).show();
 }
@@ -119,37 +132,39 @@ function setStatus(status) {
 <body>
 <div class="container">
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-4">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h2 class="panel-title">Message Monitor</h2>
 				</div>
 				<div class="panel-body">
-					<h5>Actions</h5>
-					<div class="btn-group">
-						<button type="button" class="btn btn-default btn-sm" id="btn-pause">Pause</button>
-						<button type="button" class="btn btn-default btn-sm" id="btn-resume">Resume</button>
-						<button type="button" class="btn btn-default btn-sm" id="btn-generate">Generate</button>
+					<div class="auto-scroll box">
+						<h5>Actions</h5>
+						<div class="btn-group">
+							<button type="button" class="btn btn-default btn-sm" id="btn-pause">Pause <span class="glyphicon glyphicon-pause"></span></button>
+							<button type="button" class="btn btn-default btn-sm" id="btn-resume">Resume <span class="glyphicon glyphicon-play"></span></button>
+							<button type="button" class="btn btn-default btn-sm" id="btn-generate">Generate <span class="glyphicon glyphicon-file"></span></button>
+						</div>
+						<h5>Status</h5>
+						<div id="status">
+							<h4 class="up"><span class="label label-success">Connected <span class="glyphicon glyphicon-signal"></span></span></h4>
+							<h4 class="down"><span class="label label-warning">Down <span class="glyphicon glyphicon-warning-sign"></span></span></h4>
+							<h4 class="paused"><span class="label label-info">Paused</span></h4>
+							<h4 class="pending"><span class="label label-info">Pending</span></h4>
+						</div>
+						<div id="status-text"></div>
 					</div>
-					<h5>Status</h5>
-					<div id="status">
-						<h4 class="up"><span class="label label-success">Connected</span></h4>
-						<h4 class="down"><span class="label label-warning">Down</span></h4>
-						<h4 class="paused"><span class="label label-info">Paused</span></h4>
-						<h4 class="pending"><span class="label label-info">Pending</span></h4>
-					</div>
-					<div id="status-text"></div>
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-8">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h2 class="panel-title">Messages</h2>
 				</div>
 				<div class="panel-body">
-					<div class="auto-scroll">
-						<table class="table">
+					<div class="auto-scroll box">
+						<table class="table table-bordered table-hover">
 							<tbody id="messages"/>
 						</table>
 					</div>
