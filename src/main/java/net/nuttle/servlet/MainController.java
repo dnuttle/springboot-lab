@@ -7,16 +7,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import net.nuttle.bean.TestBean;
 import net.nuttle.model.Message;
+import net.nuttle.model.User;
 import net.nuttle.service.MessageService;
 
 //RestController is annotated with both Controller and ResponseBody
@@ -36,6 +40,7 @@ public class MainController {
   
   @RequestMapping(value="/hello", method=RequestMethod.GET)
   @ResponseBody
+  @ResponseStatus(HttpStatus.OK)
   public String hello(@RequestParam Map<String, String> allRequestParams, ModelMap map) {
     LOG.debug("hello");
     allRequestParams.forEach((key, val) -> {
@@ -135,5 +140,28 @@ public class MainController {
   public String generate() {
     messageService.generateMessage();
     return "generated";
+  }
+  
+  @RequestMapping(value="/posttest", method=RequestMethod.POST)
+  @ResponseBody
+  @ResponseStatus(HttpStatus.CREATED)
+  public String postTest() {
+    return "posttest";
+  }
+  
+  @RequestMapping(value="/puttest", method=RequestMethod.PUT)
+  @ResponseBody
+  @ResponseStatus(HttpStatus.ACCEPTED)
+  public String putTest() {
+    return "puttest";
+  }
+  
+  /**
+   * Attempt to create User from parameters
+   */
+  @RequestMapping(value="/user", method=RequestMethod.POST)
+  @ResponseBody
+  public String user(@RequestBody User user) {
+    return user.toString();
   }
 }

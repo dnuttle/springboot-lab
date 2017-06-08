@@ -4,14 +4,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TestBean {
-  
+  private String value;
 
   @Override
   public String toString() {
-    return "a bean";
+    return "a bean with value: " + value;
   }
   
   public String getValue() {
-    return "bean value";
+    return value;
   }
 }
