@@ -1,14 +1,16 @@
 package net.nuttle.app;
 
+import java.util.Arrays;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -19,22 +21,20 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
-import net.nuttle.service.MessageService;
-
 //SpringBootApplication annotation is an umbrella that includes:
 //Configuration
 //AutoConfigurationEnabled
 //ComponentScan
 @SpringBootApplication
-
 //ComponentScan is a meta-annotation for SpringBootApplication,
 //but I want to override.  In this example, only Controllers, Components and Services
 //will be scanned in the specified packages.  @Repository would be ignored.
-@ComponentScan(basePackages={"net.nuttle"}, 
+@ComponentScan(basePackages={"net.nuttle"},
   useDefaultFilters=false,
   includeFilters={@ComponentScan.Filter(type=FilterType.ANNOTATION, 
-    value={Component.class, Controller.class, Service.class, SpringBootApplication.class})}
+    value={Component.class, Controller.class, Service.class})}
 )
+@Configuration
 //This says to ignore all of the default filters, but @Controller and @Component are still scanned;
 //apparently if there are multiple ComponentScan tags, the result is an OR of all of them, not an AND.
 //@ComponentScan(basePackages={"net.nuttle.servlet", "net.nuttle.bean"}, useDefaultFilters=false)
@@ -83,17 +83,21 @@ public class Application {
     SpringApplication.run(Application.class, args);
   }
   
+  /**
+   * For reasons I don't understand yet, this won't execute when 
+   * there is a ComponentScan annotation.  Even if there is also @Component and @Configuration.
+   * @param ctx
+   * @return
+   */
   @Bean
   @Order(1)
   public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
     return args -> {
-      /*
       String[] beanNames = ctx.getBeanDefinitionNames();
       Arrays.sort(beanNames);
       for (String bean : beanNames) {
-        System.out.println(bean);
+        LOG.info(bean);
       }
-      */
     };
   }
   
