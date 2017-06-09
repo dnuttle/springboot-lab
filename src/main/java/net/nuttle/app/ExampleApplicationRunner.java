@@ -27,10 +27,8 @@ public class ExampleApplicationRunner implements ApplicationRunner {
   
   @Override
   public void run(ApplicationArguments args) {
-    //The example is to register a bean, but of course that
-    //could be done more simply using @Bean.
-    //You could do anything here.
-    TestBean2 testBean = (TestBean2) ctx.getBean(TestBean2.class);
-    LOG.debug("TestBean2 value: " + testBean.getArg());
+    LOG.debug("Started an app runner");
+    TestBean2 bean = (TestBean2) ctx.getBean(TestBean2.class);
+    LOG.debug("TestBean2 value: " + bean.getArg());
   }
 }

@@ -8,8 +8,12 @@ import net.nuttle.bean.TestBean2;
 @Configuration
 public class BeanConfiguration {
 
+  //Configure bean with a static factory method; in this case, a builder
+  //obtained from a static factory method.
   @Bean
   public TestBean2 getTestBean2() {
-    return new TestBean2("abc");
+    return TestBean2.Builder.instance()
+      .setArg("abc")
+      .build();
   }
 }
