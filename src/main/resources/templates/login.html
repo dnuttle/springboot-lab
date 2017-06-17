@@ -28,6 +28,30 @@
 		    }
 		}
 	</style>
+	<script src="/js/jquery-3.2.1.min.js"></script>
+	<script>
+	$(document).ready(function() {
+		console.log("Ready")
+		/*
+		A test of a cross-domain ajax request.
+		The endpoint must send a header "Access-Control-Allow-Origin
+		enabling the domain of this site to allow access.
+		*/
+		$.ajax("http://localhost:8081/cdtest", {
+			success: function(data, textStatus, req) {
+				console.log(data);
+			},
+			error: function(req, textStatus, errorThrown) {
+				console.log(req)
+				console.log(textStatus)
+				console.log(errorThrown)
+			},
+			complete: function() {
+				console.log("complete")
+			}
+		})
+	})
+	</script>
 </head>
 <body>
 	<div class="container">
