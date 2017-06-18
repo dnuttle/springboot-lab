@@ -66,5 +66,8 @@ sourceSets {
   }
 }
 
+task wrapper(type:Wrapper) {
+  gradleVersion = '2.11'
+}
 
 println "Build demo: $buildDemo"
